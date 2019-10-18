@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import Axios from 'axios';
+import api from '../services/api'
+import io from 'socket.io-client';
+import { Button, Container } from 'react-bootstrap';
 
 class Ranking extends Component {
     state = {
@@ -7,21 +9,39 @@ class Ranking extends Component {
     }
 
     async componentDidMount() {
-        const response = await Axios.get('http://localhost:3333/posts')
+        this.registerToSocket();
+
+        const response = await api.get('/users')
+
         this.setState({ ranking: response.data });
+    }
+
+    registerToSocket = () => {
+        const socket = io('http://localhost:3333');
+
+        socket.on('point', addPoint => {
+            this.setState({
+                ranking: this.state.ranking.map(rank => (
+                    rank._id === addPoint._id ? addPoint : rank
+                ))
+            });
+        })
     }
 
 
     render() {
         return (
-            <div>
+            <Container>
+
+
+
                 {this.state.ranking.map(ranking => (
                     <div key={ranking._id}>
-                        <p>{ranking.author}</p>
+                        <p>{ranking.login}</p>
                         <p>{ranking.points}</p>
                     </div>
                 ))}
-            </div>
+            </Container>
         );
     }
 }
