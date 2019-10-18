@@ -11,7 +11,7 @@ class Inicio extends Component {
 
     async componentDidMount() {
         this.registerToSocket();
-
+ 
         let id = this.state.user._id;
         const response = await api.get(`/users/${id}`)
 
@@ -19,7 +19,7 @@ class Inicio extends Component {
     }
 
     registerToSocket = () => {
-        const socket = io('http://localhost:3333');
+        const socket = io('https://quantos-litrex-backend.herokuapp.com/');
 
         socket.on('point', addPoint => {
             this.setState({ profile: addPoint });

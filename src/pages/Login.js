@@ -20,7 +20,7 @@ class Login extends Component {
 
         if (user !== undefined) {
             localStorage.setItem('@USER', JSON.stringify(user))
-            this.props.history.push('/inicio');
+            this.props.history.push('/ranking');
         }
     }
 
